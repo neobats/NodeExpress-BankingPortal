@@ -46,4 +46,12 @@ app.get('/credit', async (req, res) => {
   }
 })
 
+app.get('/profile', async (req, res) => {
+  try {
+    res.render('profile', { user: users[0] })
+  } catch {
+    console.error('encountered an error', req.headers)
+  }
+})
+
 app.listen(3000, async () => console.log('PS Project Running on port 3000!'))
