@@ -9,7 +9,7 @@ app.set('view engine', 'ejs')
 
 // additions to express app
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 
 // getting account data
 const accountData = fs.readFileSync(path.join(__dirname, 'json', 'accounts.json'), { encoding: 'UTF8' })
@@ -22,7 +22,7 @@ const users = JSON.parse(userData)
 // routes
 app.get('/', async (req, res) => {
   try {
-    res.render('index', { title: 'Account Summary', accounts})
+    res.render('index', { title: 'Account Summary', accounts })
   } catch {
     console.error('encountered an error', req.headers)
     res.redirect('/')
@@ -80,10 +80,31 @@ app.post('/transfer', async (req, res) => {
     accounts[req.body.to].balance += parseInt(req.body.amount, 10)
     const accountsJSON = JSON.stringify(accounts, null, 4);
     fs.writeFileSync(path.join(__dirname, 'json/accounts.json'), accountsJSON, 'utf8')
-    res.render('transfer', { message: 'Transfer Completed'})
+    res.render('transfer', { message: 'Transfer Completed' })
   } catch {
     console.error('error in sending form', req.body)
     res.redirect('/transfer')
+  }
+})
+
+app.get('/payment', async (req, res) => {
+  try {
+    res.render('payment', { account: accounts.credit })
+  } catch {
+    console.error('encountered an error', req.headers)
+    res.redirect('/')
+  }
+})
+app.post('/payment', async (req, res) => {
+  try {
+    accounts.credit.balance -= parseInt(req.body.amount)
+    accounts.credit.available += parseInt(req.body.amount)
+    const accountsJSON = JSON.stringify(accounts, null, 4)
+    fs.writeFileSync(path.join(__dirname, 'json/accounts.json'), accountsJSON, 'utf8')
+    res.render('payment', { message: 'Payment Successful', account: accounts.credit })
+  } catch {
+    console.error('error in sending form', req.body)
+    res.redirect('/payment')
   }
 })
 
