@@ -23,7 +23,7 @@ router.post('/payment', async (req, res) => {
   }
 })
 
-app.get('/transfer', async (req, res) => {
+router.get('/transfer', async (req, res) => {
   try {
     res.render('transfer')
   } catch {
@@ -32,7 +32,7 @@ app.get('/transfer', async (req, res) => {
   }
 })
 // POST
-app.post('/transfer', async (req, res) => {
+router.post('/transfer', async (req, res) => {
   try {
     accounts[req.body.from].balance -= req.body.amount
     accounts[req.body.to].balance += parseInt(req.body.amount, 10)
@@ -44,4 +44,4 @@ app.post('/transfer', async (req, res) => {
   }
 })
 
-module.exports = {router}
+module.exports = router
