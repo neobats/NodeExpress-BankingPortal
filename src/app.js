@@ -58,25 +58,5 @@ app.post('/transfer', async (req, res) => {
   }
 })
 
-app.get('/payment', async (req, res) => {
-  try {
-    res.render('payment', { account: accounts.credit })
-  } catch {
-    console.error('encountered an error', req.headers)
-    res.redirect('/')
-  }
-})
-app.post('/payment', async (req, res) => {
-  try {
-    accounts.credit.balance -= parseInt(req.body.amount)
-    accounts.credit.available += parseInt(req.body.amount)
-    writeJSON()
-    res.render('payment', { message: 'Payment Successful', account: accounts.credit })
-  } catch {
-    console.error('error in sending form', req.body)
-    res.redirect('/payment')
-  }
-})
-
 // generate server
 app.listen(3000, async () => console.log('PS Project Running on port 3000!'))
