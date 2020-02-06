@@ -1,6 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
+const {
+  accounts, 
+  users,
+  writeJSON
+} = require('./data')
 
 const app = express()
 
@@ -11,13 +16,6 @@ app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }))
 
-// getting account data
-const accountData = fs.readFileSync(path.join(__dirname, 'json', 'accounts.json'), { encoding: 'UTF8' })
-const accounts = JSON.parse(accountData)
-
-// getting user data
-const userData = fs.readFileSync(path.join(__dirname, 'json', 'users.json'), { encoding: 'UTF8' })
-const users = JSON.parse(userData)
 
 // routes
 app.get('/', async (req, res) => {
@@ -78,8 +76,7 @@ app.post('/transfer', async (req, res) => {
   try {
     accounts[req.body.from].balance -= req.body.amount
     accounts[req.body.to].balance += parseInt(req.body.amount, 10)
-    const accountsJSON = JSON.stringify(accounts, null, 4);
-    fs.writeFileSync(path.join(__dirname, 'json/accounts.json'), accountsJSON, 'utf8')
+    writeJSON()
     res.render('transfer', { message: 'Transfer Completed' })
   } catch {
     console.error('error in sending form', req.body)
@@ -99,8 +96,7 @@ app.post('/payment', async (req, res) => {
   try {
     accounts.credit.balance -= parseInt(req.body.amount)
     accounts.credit.available += parseInt(req.body.amount)
-    const accountsJSON = JSON.stringify(accounts, null, 4)
-    fs.writeFileSync(path.join(__dirname, 'json/accounts.json'), accountsJSON, 'utf8')
+    writeJSON()
     res.render('payment', { message: 'Payment Successful', account: accounts.credit })
   } catch {
     console.error('error in sending form', req.body)
