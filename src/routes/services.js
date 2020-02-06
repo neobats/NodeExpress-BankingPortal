@@ -23,4 +23,25 @@ router.post('/payment', async (req, res) => {
   }
 })
 
+app.get('/transfer', async (req, res) => {
+  try {
+    res.render('transfer')
+  } catch {
+    console.error('encountered an error', req.headers)
+    res.redirect('/')
+  }
+})
+// POST
+app.post('/transfer', async (req, res) => {
+  try {
+    accounts[req.body.from].balance -= req.body.amount
+    accounts[req.body.to].balance += parseInt(req.body.amount, 10)
+    writeJSON()
+    res.render('transfer', { message: 'Transfer Completed' })
+  } catch {
+    console.error('error in sending form', req.body)
+    res.redirect('/transfer')
+  }
+})
+
 module.exports = {router}
