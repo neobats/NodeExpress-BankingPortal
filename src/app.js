@@ -6,6 +6,7 @@ const {
   users,
   writeJSON
 } = require('./data')
+const accountRoutes = require('routes/accounts')
 
 const app = express()
 
@@ -21,33 +22,6 @@ app.use(express.urlencoded({ extended: true }))
 app.get('/', async (req, res) => {
   try {
     res.render('index', { title: 'Account Summary', accounts })
-  } catch {
-    console.error('encountered an error', req.headers)
-    res.redirect('/')
-  }
-})
-
-app.get('/savings', async (req, res) => {
-  try {
-    res.render('account', { account: accounts.savings })
-  } catch {
-    console.error('encountered an error', req.headers)
-    res.redirect('/')
-  }
-})
-
-app.get('/checking', async (req, res) => {
-  try {
-    res.render('account', { account: accounts.checking })
-  } catch {
-    console.error('encountered an error', req.headers)
-    res.redirect('/')
-  }
-})
-
-app.get('/credit', async (req, res) => {
-  try {
-    res.render('account', { account: accounts.credit })
   } catch {
     console.error('encountered an error', req.headers)
     res.redirect('/')
