@@ -7,6 +7,7 @@ const {
   writeJSON
 } = require('./data')
 const accountRoutes = require('./routes/accounts')
+const servicesRoutes = require('./routes/services')
 
 const app = express()
 
