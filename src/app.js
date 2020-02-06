@@ -40,7 +40,6 @@ app.get('/profile', async (req, res) => {
   }
 })
 
-
 app.use('/services', servicesRoutes)
 
 // generate server
